@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Alert{% endblock %}
+
+{% block content %}
+
+<!-- -->
+<div class="container px-0 py-3">
+  <div class="row mb-3">
+  <div class="col-6 mx-auto">
+  <form method="POST">
+    <div class="form-group">
+      <label for="alertName">Alert Name</label>
+      <input 
+        type="text" 
+        class="form-control" 
+        id="alertName" 
+        name="alertName" 
+        value="{{ alert.alert_name }}">
+    </div>
+    <div class="form-group">
+      <label for="pageLink">Webpage link</label>
+      <input 
+        type="text" 
+        class="form-control" 
+        id="pageLink" 
+        name="pageLink" 
+        value="{{ alert.webpage_link }}">
+    </div>
+    <div class="form-group">
+      <div class="row">
+          <div class="col-6">
+              <label for="searchElement" class="col-form-label">Search Element</label>
+              <input type="text" 
+                class="form-control" 
+                id="searchElement" 
+                name="searchElement" 
+                value="{{ alert.element_comparison_identifier }}">
+            </div>
+          <div class="col-4">
+              <label for="elementType" class="col-form-label">Element Type</label>
+              <select id="elementType" name="elementType" class="form-control">
+                {% for elem_type in formRestrictions.element_type %}
+                {% if alert.element_comparison_identifier == elem_type %}
+                <option selected>{{ elem_type }}</option>
+                {% else %}
+                <option>{{ elem_type }}</option>
+                {% endif %}
+                {% endfor %}
+                </select>
+          </div>
+      </div>
+  </div>  
+  <div class="form-group">
+    <div class="row">
+        <div class="col-6">
+            <label for="intervalValue" class="col-form-label">Interval Value:</label>
+            <input 
+              type="number" 
+              min="0" 
+              class="form-control" 
+              id="intervalValue" 
+              name="intervalValue" 
+              value="{{ alert.refresh_interval_value }}">
+        </div>
+        <div class="col-4">
+            <label for="intervalType" class="col-form-label">Interval Period:</label>
+            <select id="intervalType" name="intervalType" class="form-control">
+              {% for interval_type in formRestrictions.accepted_intervals %}
+              {% if alert.refresh_interval_period_type == interval_type %}
+              <option selected>{{ interval_type }}</option>
+              {% else %}
+              <option>{{ interval_type }}</option>
+              {% endif %}
+              {% endfor %}
+              </select>
+        </div>
+    </div>
+</div> 
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+  </div>
+</div>
+  
+
+{% endblock %}

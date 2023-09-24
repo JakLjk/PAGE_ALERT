@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Sign In{% endblock %}
+
+{% block content %}
+
+
+    <div class="div-center">
+      <div class="content">
+        <h3>Sign in</h3>
+        <hr />
+        <form method="POST">
+            <div class="form-group">
+              <label for="inputEmail">Email address</label>
+              <input 
+              type="email" 
+              class="form-control" 
+              id="inputEmail" 
+              name="inputEmail"
+              placeholder="Email">
+            </div>
+            <div class="form-group">
+              <label for="inputPassword">Password</label>
+              <input 
+              type="password" 
+              class="form-control" 
+              id="inputPassword"
+              name="inputPassword" 
+              placeholder="Password">
+            </div>
+            <button type="submit" class="btn btn-primary">Sign in</button>
+            <hr />
+            <button type="button" class="btn btn-link" 
+            onclick="location.href='/sign-up'">Sign-up</button>
+            <button type="button" class="btn btn-link">Reset Password</button>
+          </form>
+  
+      </div>
+  
+
+
+{% endblock %}

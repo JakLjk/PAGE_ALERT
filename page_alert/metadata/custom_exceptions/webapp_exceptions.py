@@ -1,0 +1,2 @@
+class PasswordIntegrityException(Exception):
+    pass

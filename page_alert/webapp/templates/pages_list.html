@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+
+<div class="container px-0 py-3">
+<div class="row mb-3">
+
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#pageFormModal">Add webpage</button>
+
+<div class="modal fade" id="pageFormModal" tabindex="-1" role="dialog" aria-labelledby="pageFormModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="pageFormModalLabel">Add webpage</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method="POST">
+      <div class="modal-body">
+            <div class="form-group">
+              <label for="alert-name" class="row-form-label">Alert Name:</label>
+              <input type="text" class="form-control" id="alert-name" name="alert-name">
+            </div>
+            <div class="form-group">
+              <label for="page-link" class="row-form-label">Webpage Link:</label>
+              <input type="text" class="form-control" id="page-link" name="page-link">
+            </div>
+            <div class="form-group">
+              <div class="row">
+                  <div class="col-6">
+                      <label for="search-element" class="col-form-label">Search Element:</label>
+                      <input type="text" class="form-control" id="search-element" name="search-element">
+                    </div>
+                  <div class="col-4">
+                      <label for="element-type" class="col-form-label">Element Type:</label>
+                      <select id="element-type" name="element-type" class="form-control">
+                        {% for elem_type in formRestrictions.element_type %}
+                        <option>{{ elem_type }}</option>
+                        {% endfor %}
+                        </select>
+                  </div>
+              </div>
+          </div>  
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-6">
+                        <label for="interval-value" class="col-form-label">Interval Value:</label>
+                        <input type="number" min="0" class="form-control" id="interval-value" name="interval-value">
+                    </div>
+                    <div class="col-4">
+                        <label for="interval-type" class="col-form-label">Interval Period:</label>
+                        <select id="interval-type" name="interval-type" class="form-control">
+                          {% for restriction in formRestrictions.accepted_intervals %}
+                          <option>{{ restriction }}</option>
+                          {% endfor %}
+                          </select>
+                    </div>
+                </div>
+            </div>    
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Add Alert</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+
+
+<table class="table align-middle mb-0 table_background">
+    <thead class="table_background">
+      <tr>
+        <th>Name</th>
+        <th>Interval</th>
+        <th>Status</th>
+        <th>Differences</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+        {% for alert in user.user_process %}
+        <tr>
+        <td  style="vertical-align: middle;" >
+          <div class="d-flex align-items-center">
+            <img
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Circle-icons-tools.svg/1200px-Circle-icons-tools.svg.png"
+                alt=""
+                style="width: 35px; height: 35px"
+                class="rounded-circle"
+                />
+            <div class="ml-3 ms-3">
+              <p class="fw-bold mb-1">{{ alert.alert_name }}</p>
+              <p class="text-muted mb-0">{{ alert.webpage_link }}</p>
+            </div>
+          </div>
+        </td>
+
+        <td>
+          <p class="fw-normal mb-1">Every {{ alert.refresh_interval_value}} {{alert.refresh_interval_period_type}}</p>
+          <p class="text-muted mb-0"> Running indefinitely </p>
+        </td>
+        <td  style="vertical-align: middle;" >
+          {% if alert.alert_status == dbStatusFields.alert_status_initializing %}
+          <span class="badge badge-primary rounded-pill d-inline">Initializing</span>
+          {% elif alert.alert_status == dbStatusFields.alert_status_active%}
+          <span class="badge badge-success rounded-pill d-inline">Active</span>
+          {% elif alert.alert_status == dbStatusFields.alert_status_delayed %}
+          <span class="badge badge-warning rounded-pill d-inline">Delayed</span>
+          {% elif alert.alert_status == dbStatusFields.alert_status_stopped %}
+          <span class="badge badge-dark rounded-pill d-inline">Stopped</span>
+          {% elif alert.alert_status == dbStatusFields.ert_status_difference %}
+          <span class="badge badge-danger rounded-pill d-inline">Difference</span>
+          {% else %}
+          <span class="badge badge-secondary rounded-pill d-inline">N/A</span>
+          {% endif %}
+        </td>
+        <td style="vertical-align: middle;">No Differences</td>
+        <td>
+          <button  class="btn btn-info btn-sm" onClick="location.href='/alert_details/{{ alert.id }}'">Details</button>
+          <br style="line-height: 40px;">
+          <button  class="btn btn-danger btn-sm" onClick="deleteAlert({{alert.id}})">Delete</button>
+        </td>
+      </tr>
+      {% endfor %}
+  </tbody>
+  </table>
+
+<div class="col-8"></div>
+<div class="col-4"></div>
+</div>
+</div>
+{% endblock %}
